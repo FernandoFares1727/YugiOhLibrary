@@ -1,0 +1,120 @@
+@import url('./progress/style.css');
+
+:root {
+    --headerFont:#FFFFFF;
+    --SearchButtonHover: #B8B8B8;
+}
+
+body {
+    margin: 0; /* Remove as margens padrão do corpo */
+    height: 100vh;
+    background-image: url("./images/background.png");
+    background-size: cover;
+    background-position: center;
+}
+
+header {
+    display: flex;
+    flex-direction: column;
+    min-height: 150px;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 12px 24px; /* Combine top/left/right padding */
+    gap: 15px;
+    margin: 0px;
+}
+
+#search {
+    display: flex;
+    justify-content: center;
+    max-width: 900px;
+    width: 100%;
+    gap: 16px;
+}
+
+#search input {
+    flex: 1;
+    background-color: var(--headerFont);
+    padding-left: 25px;
+    background-image: url(./images/search.svg);
+    background-repeat: no-repeat;
+    background-position: calc(5px) center;
+    border-radius: 25px;
+    border: none;
+}
+
+/* Modal para exibir a carta */
+.modal {
+    display: none; /* Esconde o modal inicialmente */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* Fundo escuro com transparência */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Garante que está acima de outros elementos */
+}
+
+.modal-image {
+    max-width: 80%;
+    max-height: 80%;
+    border: 5px solid white; /* Borda para destacar a imagem */
+    border-radius: 10px; /* Borda arredondada */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5); /* Sombra ao redor da imagem */
+    transition: transform 0.3s ease; /* Animação ao exibir a imagem */
+}
+
+.modal-image:hover {
+    transform: scale(1.05); /* Aumenta levemente ao passar o mouse */
+}
+
+.card {
+    cursor: pointer; /* Indica que a imagem é clicável */
+    transition: transform 0.2s ease; /* Animação de hover */
+}
+
+.card:hover {
+    transform: scale(1.1); /* Aumenta levemente a imagem ao passar o mouse */
+}
+
+#pageContainer {
+    display: flex;
+    flex: 1;
+    justify-content: right;
+    margin-right: 20px;
+}
+
+#page {
+    /* Styles for the select element */
+    border: 1px solid; /* Add a border */
+    padding: 5px; /* Add padding */
+    border-radius: 4px; /* Add rounded corners */
+    font-size: 16px; /* Set font size */
+    margin-right: 5px;
+    margin-bottom: 5px;
+
+    /* Limit the size when dropdown is open */
+    max-height: 30px; /* Limite de altura das opções */
+    overflow-y: auto; /* Adiciona rolagem se as opções ultrapassarem a altura */
+}
+
+#page:disabled {
+    background-color: var(--SearchButtonHover);
+    cursor: not-allowed;
+}
+
+
+#cardList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 13px;
+    padding: 12px 12px 24px;
+    border-radius: 8px;
+}
+
+#cardList img {
+    max-width: 250px;
+    max-height: 250px;
+}
