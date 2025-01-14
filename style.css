@@ -169,9 +169,13 @@ header {
         margin-left: 20px;
     }
 
+    #cardList {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); /* Ajusta o número de colunas dinamicamente */
+    }
+
     #cardList img {
-        max-width: 200px;
-        max-height: 200px;
+        max-width: 150px;
+        max-height: 150px;
     }
 }
 
@@ -180,8 +184,6 @@ header {
     #pageContainer {
         flex-direction: column;
     }
-
-
 
     #pageTable {
         margin-left: 20px;
