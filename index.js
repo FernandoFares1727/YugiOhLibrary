@@ -8,13 +8,19 @@ const searchDisplay = {
     hide : "none"
 };
 
+let races = [];
+let types = [];
+
 const mainAPI = "https://db.ygoprodeck.com/api/v7/cardinfo.php";
 
-async function fetchAllCards() {
+async function fetchAllCards(filter) {
 
     try {
+
+        var url = mainAPI + filter;
+
         // Faz a requisição para a API
-        const response = await fetch(mainAPI);
+        const response = await fetch(url);
 
         // Verifica se a resposta é válida
         if (!response.ok) {
@@ -53,8 +59,6 @@ async function displayCards(page = 1) {
     document.body.appendChild(progressBar);
 
     try {
-        console.log(page);
-
         // Calcular o intervalo mínimo e máximo de cards com base na página atual
         const minInterval = (page - 1) * cardsByPage; // Posição do primeiro card
         const maxInterval = page * cardsByPage; // Posição do último card
@@ -107,6 +111,8 @@ function createYugiCard(yugiCard, index) {
     // Adiciona evento de clique para exibir em modal
     card.addEventListener('click', () => showCardInModal(card));
 
+    card.style.order = index;
+
     // Adiciona a imagem ao contêiner
     cardList.appendChild(card);
 }
@@ -128,25 +134,47 @@ document.getElementById('cardModal').addEventListener('click', () => {
 });
 
 // Chama fetchAllCards e, quando concluído, preenche os IDs e chama displayCards
-fetchAllCards().then(cards => {
-    if (cards) {
-        // Mapeia os cards para armazenar um objeto com o índice e o ID
-        cardIds = cards.map((card, index) => ({
-            index: index,  // O índice começa de 0 e aumenta à medida que os cards são inseridos
-            id: card.id    // O ID da carta
-        }));
+function getCardList(filter = '')
+{
+    fetchAllCards(filter).then(cards => {
+        if (cards) {
+            // Mapeia os cards para armazenar um objeto com o índice e o ID
+            cardIds = cards.map((card, index) => ({
+                index: index,  // O índice começa de 0 e aumenta à medida que os cards são inseridos
+                id: card.id    // O ID da carta
+            }));
+    
+            // Adiciona a raça se ainda não existir na lista de raças
+            cards.forEach(card => {
+                if (!races.includes(card.race) && card.race) {
+                    races.push(card.race);
+                }
+                
+                // Adiciona o tipo se ainda não existir na lista de tipos
+                if (!types.includes(card.type) && card.type) {
+                    types.push(card.type);
+                }
+            });
+    
+            createPageSelect();
+            createTypeSelect();
+            createRaceSelect();
+            searchCard();
+            // Chama displayCards somente após cardIds estar preenchido
+            displayCards();
+        }
+    });
+}
 
-        createPageSelect();
-        searchCard();
-        // Chama displayCards somente após cardIds estar preenchido
-        displayCards();
-    }
-});
+getCardList();
 
 function createPageSelect()
 {
-    var pageSelect = document.querySelector('#page');
+    var pageSelect = document.getElementById('pageTable');
     var maxPages = Math.ceil(totalCards/cardsByPage);
+
+    // Remove todas as opções existentes do select
+    pageSelect.innerHTML = '';
 
     for (let i = 0; i < maxPages; i++)
         {
@@ -163,6 +191,46 @@ function createPageSelect()
         var selectedPage = event.target.value;
         removeCards();
         displayCards(selectedPage);
+    })
+}
+
+function createTypeSelect(){
+    
+    var typeSelect = document.getElementById('pageType');
+
+    typeSelect.innerHTML = '';
+
+    var generalOption = document.createElement('option');
+    generalOption.textContent = 'All';
+    generalOption.value = 'All';
+    typeSelect.appendChild(generalOption);
+
+    types.forEach(type => {
+        var actualOption = type;
+        var option = document.createElement('option');
+        option.textContent = actualOption;
+        option.value = actualOption;
+        typeSelect.appendChild(option);
+    })
+}
+
+function createRaceSelect(){
+
+    var raceSelect = document.getElementById('pageRace');
+
+    raceSelect.innerHTML = '';
+
+    var generalOption = document.createElement('option');
+    generalOption.textContent = 'All';
+    generalOption.value = 'All';
+    raceSelect.appendChild(generalOption);
+
+    races.forEach(race => {
+        var actualOption = race;
+        var option = document.createElement('option');
+        option.textContent = actualOption;
+        option.value = actualOption;
+        raceSelect.appendChild(option);
     })
 }
 
@@ -187,8 +255,6 @@ function searchCard(){
 
     searchInput.addEventListener("input", function() {
         var valueInput = searchInput.value.trim().toLowerCase();
-
-        console.log(valueInput);
 
         if (valueInput == '')
         {
@@ -217,3 +283,33 @@ function showAllCards()
         card.style.display = searchDisplay.show;
     })
 }
+
+function completeAdvancedSearch() {
+    removeCards();
+
+    var typeSelect = document.getElementById('pageType');
+    var raceSelect = document.getElementById('pageRace');
+
+    // Inicializa o filtro vazio
+    var filter = [];
+
+    // Adiciona o tipo ao filtro, caso não seja "All"
+    if (typeSelect.value !== 'All') 
+        filter.push(`type=${typeSelect.value}`);
+
+    // Adiciona a raça ao filtro, caso não seja "All"
+    if (raceSelect.value !== 'All') 
+        filter.push(`race=${raceSelect.value}`);
+
+    // Combina os parâmetros do filtro usando '&'
+    var filterQuery = filter.length > 0 ? `?${filter.join('&')}` : '';
+
+    // Chama a função para buscar as cartas com o filtro
+    getCardList(filterQuery);
+}
+
+
+var completeSearchButton = document.getElementById('completeSearch');
+completeSearchButton.addEventListener('click', function (){
+    completeAdvancedSearch();
+})

@@ -15,7 +15,20 @@
         <img id="modalImage" class="modal-image" alt="Card Image">
     </div>    
     <div id="pageContainer">
-        <select name="page" id="page"></select>
+        <div id="advancedSearch">
+            <div class="advancedSearchContainer">
+                <p>Type</p>
+                <select class="pageSelect" id="pageType"></select>
+            </div>
+            <div class="advancedSearchContainer">
+                <p>Race</p>
+                <select class="pageSelect" id="pageRace"></select>
+            </div>
+            <button id="completeSearch">
+                <img src="./images/search.svg" alt="search">
+            </button>
+        </div>
+        <select class="pageSelect" id="pageTable"></select>
     </div>
     <div id="cardList"></div>
     <script src="./index.js" type="module"></script>

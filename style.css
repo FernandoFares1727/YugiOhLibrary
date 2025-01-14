@@ -11,15 +11,17 @@ body {
     background-image: url("./images/background.png");
     background-size: cover;
     background-position: center;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 header {
     display: flex;
     flex-direction: column;
-    min-height: 150px;
+    height: 150px;
     justify-content: center;
     align-items: center;
-    padding: 12px 12px 24px; /* Combine top/left/right padding */
+    padding: 12px 12px 12px; /* Combine top/left/right padding */
     gap: 15px;
     margin: 0px;
 }
@@ -28,12 +30,14 @@ header {
     display: flex;
     justify-content: center;
     max-width: 900px;
+    height: 32px;
     width: 100%;
     gap: 16px;
 }
 
 #search input {
     flex: 1;
+    max-width: 500px;
     background-color: var(--headerFont);
     padding-left: 25px;
     background-image: url(./images/search.svg);
@@ -81,18 +85,48 @@ header {
 
 #pageContainer {
     display: flex;
+    justify-content: space-between;
     flex: 1;
-    justify-content: right;
-    margin-right: 20px;
+    /*margin-right: 20px;*/
 }
 
-#page {
+#advancedSearch {
+    display: flex;
+}
+
+.advancedSearchContainer {
+    margin-left: 20px;
+}
+
+.advancedSearchContainer p {
+    font-size: 20px;
+}
+
+.advancedSearchContainer p {
+    color: var(--headerFont);
+}
+
+#advancedSearch button {
+    align-self: flex-end;
+    background-color: var(--headerFont);
+    border: none;
+    padding: 8px 8px;
+    height: 30px;
+    margin-bottom: 5px;
+}
+
+#advancedSearch button:hover {
+    background-color: var(--SearchButtonHover);
+}
+
+.pageSelect {
+    align-self: flex-end;
     /* Styles for the select element */
     border: 1px solid; /* Add a border */
     padding: 5px; /* Add padding */
     border-radius: 4px; /* Add rounded corners */
     font-size: 16px; /* Set font size */
-    margin-right: 5px;
+    /*margin-right: 5px;*/
     margin-bottom: 5px;
 
     /* Limit the size when dropdown is open */
@@ -100,7 +134,7 @@ header {
     overflow-y: auto; /* Adiciona rolagem se as opções ultrapassarem a altura */
 }
 
-#page:disabled {
+.pageSelect:disabled {
     background-color: var(--SearchButtonHover);
     cursor: not-allowed;
 }
@@ -108,13 +142,34 @@ header {
 
 #cardList {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 13px;
-    padding: 12px 12px 24px;
-    border-radius: 8px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Ajusta o número de colunas dinamicamente */
+    gap: 13px; /* Espaçamento entre os itens */
+    padding: 12px 12px 24px; /* Espaçamento interno */
+    border-radius: 8px; /* Cantos arredondados */
+    justify-items: center; /* Alinha os itens horizontalmente ao centro do grid */
+    align-items: start; /* Garante o alinhamento vertical consistente */
+    box-sizing: border-box; /* Inclui padding e bordas no tamanho total */
 }
+
 
 #cardList img {
     max-width: 250px;
     max-height: 250px;
+}
+
+@media screen and ((max-width: 650px) or (max-height: 400px)) {
+    
+    #advancedSearch {
+        flex-direction: column;
+    }
+
+    #advancedSearch button {
+        align-self: flex-start;
+        margin-left: 20px;
+    }
+
+    #cardList img {
+        max-width: 200px;
+        max-height: 200px;
+    }
 }
