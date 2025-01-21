@@ -1,7 +1,7 @@
 
 let cardIds = [];
 let totalCards = 0;
-let cardsByPage = 600;
+let cardsByPage = 200;
 
 const searchDisplay = {
     show : "flex",
